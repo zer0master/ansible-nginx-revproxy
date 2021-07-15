@@ -1,1 +1,4 @@
-stock_site_configs: /etc/nginx/sites-*
+stock_site_configs:
+  - /etc/nginx/sites-available/default
+  - /etc/nginx/sites-enabled/default
+service_port: "8080"
