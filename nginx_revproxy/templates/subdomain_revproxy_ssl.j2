@@ -13,8 +13,8 @@ server {
 
     server_name jenkins.ld-projects.com;
 
-    ssl_certificate       /etc/ssl/nginx/certs/fullchain.pem;
-    ssl_certificate_key   /etc/ssl/nginx/certs/privkey.pem; 
+    ssl_certificate       {{ certs_target_folder }}/fullchain.pem;
+    ssl_certificate_key   {{ certs_target_folder }}/privkey.pem; 
 
     location / {
         proxy_set_header        Host $host:$server_port;

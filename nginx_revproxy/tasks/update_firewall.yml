@@ -4,13 +4,19 @@
   ufw:
     rule: allow
     name: OpenSSH
+  tags:
+    - nginx
 
 - name: update firewall for nginx
   ufw:
     rule: allow
     name: Nginx Full
+  tags:
+    - nginx
 
 - name: start nginx
   ufw:
     state: enabled
+  tags:
+    - nginx
 ...

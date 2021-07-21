@@ -7,4 +7,6 @@
     replace: JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpPort=$HTTP_PORT --httpListenAddress=127.0.0.1"
   notify:
     - restart Jenkins
+  tags:
+    - nginx
 ...

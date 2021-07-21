@@ -2,19 +2,24 @@
 - name: get remote timestamp for uniqueness
   shell: "date +%Y%m%d_%M%H%S"
   register: tstamp_compact
+  tags:
+    - nginx
 
 # overkill?
 - name: check if config updated
   ansible.builtin.stat:
-   #path: "/etc/nginx/sites-enabled/{{ server_fqdn }}"
     path: /etc/nginx/sites-available/default
   register: default_config
+  tags:
+    - nginx
 
 - name: backup site configs
   ansible.builtin.archive:
     path: "{{ stock_site_configs }}"
     dest: "stock_site_configs-{{ tstamp_compact.stdout }}.tar"
   when: default_config.stat.exists == True
+  tags:
+    - nginx
   # still needs work: failing
 
 - name: delete default configs
@@ -24,18 +29,24 @@
   loop:
     - /etc/nginx/sites-available/default
     - /etc/nginx/sites-enabled/default
+  tags:
+    - nginx
 
 - name: update site config from template
   ansible.builtin.template:
     src: "templates/{{ template_file }}"
     dest: "/etc/nginx/sites-available/{{ server_fqdn }}"
     backup: no
+  tags:
+    - nginx
 
 - name: link enabled to available site
   ansible.builtin.file:
     path: "/etc/nginx/sites-enabled/{{ server_fqdn }}"
     src: "/etc/nginx/sites-available/{{ server_fqdn }}"
     state: link
+  tags:
+    - nginx
 # should add condition if sites-enabled config isn't symlinked
 
 - name: run nginx syntax check
@@ -46,4 +57,6 @@
     - '"test is successful" not in nginx_syntax.stderr'
   notify:
     - restart nginx
+  tags:
+    - nginx
 ...
